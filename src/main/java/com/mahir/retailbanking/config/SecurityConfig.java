@@ -17,7 +17,10 @@ public class SecurityConfig {
                                 "/api/register",
                                 "/api/login",
                                 "/api/account",
-                                "/api/users"
+                                "/api/users",
+                                "/api/deposit/**",
+                                "/api/withdraw/**",
+                                "/api/transfer/**"
                         ).permitAll()
                         .anyRequest().permitAll()
                 )
