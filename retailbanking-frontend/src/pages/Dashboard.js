@@ -88,14 +88,16 @@ function Dashboard() {
   const getTransactions = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8080/api/transactions/account/123456789",
+        "http://localhost:8080/api/transactions/123456789",
         {
           headers: {
             Authorization: `Bearer ${token}`
           }
         }
       );
+
       setTransactions(res.data);
+
     } catch (error) {
       console.log(error);
     }
@@ -149,7 +151,7 @@ function Dashboard() {
 
       {transactions.map((t, index) => (
         <div key={index}>
-          Account: {t.accountNumber} | Type: {t.type} | Amount: {t.amount}
+          Account: {t.accountNumber} | Type: {t.type} | Amount: {t.amount} | Time: {t.time}
         </div>
       ))}
 

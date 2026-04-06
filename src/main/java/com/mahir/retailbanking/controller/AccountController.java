@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:3000")
+
 public class AccountController {
 
     @Autowired
@@ -46,5 +47,10 @@ public class AccountController {
     @GetMapping("/account/{accountNumber}")
     public Account getAccount(@PathVariable String accountNumber) {
         return accountService.getAccount(accountNumber);
+    }
+
+    @GetMapping("/transactions/{accountNumber}")
+    public List<Transaction> getTransactions(@PathVariable String accountNumber) {
+        return accountService.getTransactions(accountNumber);
     }
 }
