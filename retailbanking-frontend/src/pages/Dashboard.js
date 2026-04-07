@@ -4,8 +4,11 @@ import axios from "axios";
 function Dashboard() {
   const [balance, setBalance] = useState("");
   const [amount, setAmount] = useState("");
+<<<<<<< HEAD
   const [toAccount, setToAccount] = useState("");
   const [transactions, setTransactions] = useState([]);
+=======
+>>>>>>> 2edd4d82b118aaa9095aa9ae65d5fe80666111b3
 
   const token = localStorage.getItem("token");
 
@@ -19,7 +22,13 @@ function Dashboard() {
           }
         }
       );
+<<<<<<< HEAD
       setBalance(res.data);
+=======
+
+      setBalance(res.data);
+
+>>>>>>> 2edd4d82b118aaa9095aa9ae65d5fe80666111b3
     } catch (error) {
       console.log(error);
     }
@@ -38,6 +47,7 @@ function Dashboard() {
       );
 
       alert("Deposit Success");
+<<<<<<< HEAD
       getBalance();
 
     } catch (error) {
@@ -97,17 +107,22 @@ function Dashboard() {
       );
 
       setTransactions(res.data);
+=======
+>>>>>>> 2edd4d82b118aaa9095aa9ae65d5fe80666111b3
 
     } catch (error) {
       console.log(error);
     }
   };
 
+<<<<<<< HEAD
   const logoutUser = () => {
     localStorage.removeItem("token");
     window.location.href = "/";
   };
 
+=======
+>>>>>>> 2edd4d82b118aaa9095aa9ae65d5fe80666111b3
   return (
     <div>
       <h2>Dashboard</h2>
@@ -119,12 +134,17 @@ function Dashboard() {
         type="text"
         placeholder="Enter amount"
         value={amount}
+<<<<<<< HEAD
         onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/g, ""))}
+=======
+        onChange={(e) => setAmount(e.target.value)}
+>>>>>>> 2edd4d82b118aaa9095aa9ae65d5fe80666111b3
       />
 
       <br /><br />
 
       <button onClick={depositMoney}>Deposit</button>
+<<<<<<< HEAD
 
       <br /><br />
 
@@ -158,6 +178,8 @@ function Dashboard() {
       <br /><br />
 
       <button onClick={logoutUser}>Logout</button>
+=======
+>>>>>>> 2edd4d82b118aaa9095aa9ae65d5fe80666111b3
     </div>
   );
 }

@@ -3,11 +3,16 @@ package com.mahir.retailbanking.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.mahir.retailbanking.model.Account;
+<<<<<<< HEAD
 import com.mahir.retailbanking.model.Transaction;
 import com.mahir.retailbanking.service.AccountService;
 
 import java.util.List;
 
+=======
+import com.mahir.retailbanking.service.AccountService;
+
+>>>>>>> 2edd4d82b118aaa9095aa9ae65d5fe80666111b3
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -48,9 +53,12 @@ public class AccountController {
     public Account getAccount(@PathVariable String accountNumber) {
         return accountService.getAccount(accountNumber);
     }
+<<<<<<< HEAD
 
     @GetMapping("/transactions/{accountNumber}")
     public List<Transaction> getTransactions(@PathVariable String accountNumber) {
         return accountService.getTransactions(accountNumber);
     }
+=======
+>>>>>>> 2edd4d82b118aaa9095aa9ae65d5fe80666111b3
 }
