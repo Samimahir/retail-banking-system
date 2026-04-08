@@ -1,96 +1,118 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 function Dashboard() {
   const [balance, setBalance] = useState("");
-  const [amount, setAmount] = useState("");
-<<<<<<< HEAD
+  const [depositAmount, setDepositAmount] = useState("");
+  const [withdrawAmount, setWithdrawAmount] = useState("");
+  const [transferAmount, setTransferAmount] = useState("");
   const [toAccount, setToAccount] = useState("");
   const [transactions, setTransactions] = useState([]);
-=======
->>>>>>> 2edd4d82b118aaa9095aa9ae65d5fe80666111b3
+  const [showHistory, setShowHistory] = useState(false);
 
   const token = localStorage.getItem("token");
+  const accountNumber = localStorage.getItem("accountNumber");
+  const userName = localStorage.getItem("userName");
+
+  useEffect(() => {
+    if (!token) {
+      window.location.href = "/";
+    }
+  }, [token]);
 
   const getBalance = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8080/api/balance/123456789",
+        "http://localhost:8080/api/balance/" + accountNumber,
         {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         }
       );
-<<<<<<< HEAD
       setBalance(res.data);
-=======
-
-      setBalance(res.data);
-
->>>>>>> 2edd4d82b118aaa9095aa9ae65d5fe80666111b3
-    } catch (error) {
-      console.log(error);
+    } catch {
+      alert("Balance load failed");
     }
   };
 
   const depositMoney = async () => {
+    if (!depositAmount || depositAmount <= 0) {
+      alert("Enter valid amount");
+      return;
+    }
+
     try {
       await axios.put(
-        "http://localhost:8080/api/deposit/123456789/" + amount,
+        "http://localhost:8080/api/deposit/" + accountNumber + "/" + depositAmount,
         {},
         {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         }
       );
-
       alert("Deposit Success");
-<<<<<<< HEAD
+      setDepositAmount("");
       getBalance();
-
-    } catch (error) {
+    } catch {
       alert("Deposit Failed");
     }
   };
 
   const withdrawMoney = async () => {
+    if (!withdrawAmount || withdrawAmount <= 0) {
+      alert("Enter valid amount");
+      return;
+    }
+
+    if (Number(withdrawAmount) > Number(balance)) {
+      alert("Insufficient balance");
+      return;
+    }
+
     try {
       await axios.put(
-        "http://localhost:8080/api/withdraw/123456789/" + amount,
+        "http://localhost:8080/api/withdraw/" + accountNumber + "/" + withdrawAmount,
         {},
         {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         }
       );
-
       alert("Withdraw Success");
+      setWithdrawAmount("");
       getBalance();
-
-    } catch (error) {
-      alert("Insufficient Balance");
+    } catch {
+      alert("Withdraw Failed");
     }
   };
 
   const transferMoney = async () => {
+    if (!toAccount || !transferAmount || transferAmount <= 0) {
+      alert("Enter valid details");
+      return;
+    }
+
+    if (toAccount === accountNumber) {
+      alert("Cannot transfer to same account");
+      return;
+    }
+
+    if (Number(transferAmount) > Number(balance)) {
+      alert("Insufficient balance");
+      return;
+    }
+
     try {
       const res = await axios.put(
-        "http://localhost:8080/api/transfer/123456789/" + toAccount + "/" + amount,
+        "http://localhost:8080/api/transfer/" + accountNumber + "/" + toAccount + "/" + transferAmount,
         {},
         {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         }
       );
 
       alert(res.data);
+      setTransferAmount("");
+      setToAccount("");
       getBalance();
-
-    } catch (error) {
+    } catch {
       alert("Transfer Failed");
     }
   };
@@ -98,88 +120,147 @@ function Dashboard() {
   const getTransactions = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8080/api/transactions/123456789",
+        "http://localhost:8080/api/transactions/" + accountNumber,
         {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         }
       );
-
       setTransactions(res.data);
-=======
->>>>>>> 2edd4d82b118aaa9095aa9ae65d5fe80666111b3
-
-    } catch (error) {
-      console.log(error);
+      setShowHistory(true);
+    } catch {
+      alert("Transaction load failed");
     }
   };
 
-<<<<<<< HEAD
   const logoutUser = () => {
-    localStorage.removeItem("token");
+    localStorage.clear();
     window.location.href = "/";
   };
 
-=======
->>>>>>> 2edd4d82b118aaa9095aa9ae65d5fe80666111b3
+  const card = {
+    background: "white",
+    borderRadius: "15px",
+    padding: "20px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
+  };
+
+  const input = {
+    width: "100%",
+    padding: "10px",
+    marginTop: "10px",
+    borderRadius: "8px",
+    border: "1px solid #ccc"
+  };
+
+  const button = {
+    marginTop: "10px",
+    padding: "10px 20px",
+    borderRadius: "8px",
+    border: "none",
+    cursor: "pointer"
+  };
+
   return (
-    <div>
-      <h2>Dashboard</h2>
+    <div style={{
+      background: "linear-gradient(to right, #dfe9f3, #ffffff)",
+      minHeight: "100vh",
+      padding: "30px"
+    }}>
 
-      <button onClick={getBalance}>Check Balance</button>
-      <h3>{balance}</h3>
+      <div style={{
+        ...card,
+        marginBottom: "20px",
+        background: "#1e3a8a",
+        color: "white"
+      }}>
+        <h2>Welcome {userName}</h2>
+        <h3>Account Number: {accountNumber}</h3>
+      </div>
 
-      <input
-        type="text"
-        placeholder="Enter amount"
-        value={amount}
-<<<<<<< HEAD
-        onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/g, ""))}
-=======
-        onChange={(e) => setAmount(e.target.value)}
->>>>>>> 2edd4d82b118aaa9095aa9ae65d5fe80666111b3
-      />
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: "20px"
+      }}>
 
-      <br /><br />
-
-      <button onClick={depositMoney}>Deposit</button>
-<<<<<<< HEAD
-
-      <br /><br />
-
-      <button onClick={withdrawMoney}>Withdraw</button>
-
-      <br /><br />
-
-      <input
-        type="text"
-        placeholder="Enter account number"
-        value={toAccount}
-        onChange={(e) => setToAccount(e.target.value)}
-      />
-
-      <br /><br />
-
-      <button onClick={transferMoney}>Transfer</button>
-
-      <br /><br />
-
-      <button onClick={getTransactions}>Transaction History</button>
-
-      <br /><br />
-
-      {transactions.map((t, index) => (
-        <div key={index}>
-          Account: {t.accountNumber} | Type: {t.type} | Amount: {t.amount} | Time: {t.time}
+        <div style={card}>
+          <h3>Balance</h3>
+          <button style={button} onClick={getBalance}>Check Balance</button>
+          <h2>{balance}</h2>
         </div>
-      ))}
 
-      <br /><br />
+        <div style={card}>
+          <h3>Deposit</h3>
+          <input
+            style={input}
+            placeholder="Enter amount"
+            value={depositAmount}
+            onChange={(e) => setDepositAmount(e.target.value)}
+          />
+          <button style={button} onClick={depositMoney}>Deposit</button>
+        </div>
 
-      <button onClick={logoutUser}>Logout</button>
-=======
->>>>>>> 2edd4d82b118aaa9095aa9ae65d5fe80666111b3
+        <div style={card}>
+          <h3>Withdraw</h3>
+          <input
+            style={input}
+            placeholder="Enter amount"
+            value={withdrawAmount}
+            onChange={(e) => setWithdrawAmount(e.target.value)}
+          />
+          <button style={button} onClick={withdrawMoney}>Withdraw</button>
+        </div>
+
+        <div style={card}>
+          <h3>Transfer</h3>
+          <input
+            style={input}
+            placeholder="Receiver Account"
+            value={toAccount}
+            onChange={(e) => setToAccount(e.target.value)}
+          />
+          <input
+            style={input}
+            placeholder="Enter amount"
+            value={transferAmount}
+            onChange={(e) => setTransferAmount(e.target.value)}
+          />
+          <button style={button} onClick={transferMoney}>Transfer</button>
+        </div>
+      </div>
+
+      <div style={{ ...card, marginTop: "20px" }}>
+        <h3>Transaction History</h3>
+        <button style={button} onClick={getTransactions}>Show Transactions</button>
+
+        {showHistory && (
+          <table border="1" cellPadding="10" style={{ marginTop: "20px", width: "100%" }}>
+            <thead>
+              <tr>
+                <th>Account</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {transactions.map((t, index) => (
+                <tr key={index}>
+                  <td>{t.accountNumber}</td>
+                  <td>{t.type}</td>
+                  <td>{t.amount}</td>
+                  <td>{t.time}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      <div style={{ marginTop: "20px", textAlign: "center" }}>
+        <button style={button} onClick={logoutUser}>Logout</button>
+      </div>
+
     </div>
   );
 }

@@ -2,11 +2,14 @@ package com.mahir.retailbanking.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import com.mahir.retailbanking.model.User;
 import com.mahir.retailbanking.service.UserService;
 import com.mahir.retailbanking.security.JwtUtil;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -20,22 +23,22 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public String login(@RequestBody User user) {
+    public Map<String, String> login(@RequestBody User user) {
 
-        if (user.getEmail() == null || user.getPassword() == null ||
-                user.getEmail().isEmpty() || user.getPassword().isEmpty()) {
-            return "Login Failed";
-        }
+        User existingUser = userService.loginUser(user);
 
-        String result = userService.loginUser(user);
+        Map<String, String> response = new HashMap<>();
 
-        if (result.equals("Login Successful")) {
-            return jwtUtil.generateToken(user.getEmail());
+        if (existingUser != null) {
+            response.put("token", jwtUtil.generateToken(existingUser.getEmail()));
+            response.put("accountNumber", existingUser.getAccountNumber());
+            response.put("userName", existingUser.getName());
         } else {
-            return "Login Failed";
+            response.put("message", "Login Failed");
         }
-    }
 
+        return response;
+    }
 
     @PostMapping("/register")
     public User register(@RequestBody User user) {
