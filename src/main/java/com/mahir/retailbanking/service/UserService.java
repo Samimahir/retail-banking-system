@@ -20,6 +20,7 @@ public class UserService {
     @Autowired
     private AccountRepository accountRepository;
 
+    // REGISTER
     public User registerUser(User user) {
 
         String accountNumber = "ACC" + (100000 + new Random().nextInt(900000));
@@ -37,6 +38,7 @@ public class UserService {
         return savedUser;
     }
 
+    // LOGIN
     public User loginUser(User user) {
 
         User existingUser = userRepository.findByEmail(user.getEmail());
@@ -49,7 +51,33 @@ public class UserService {
         return null;
     }
 
+    // GET ALL USERS
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    // =========================
+    // PROFILE FEATURE START
+    // =========================
+
+    // GET USER BY ACCOUNT NUMBER
+    public User getUserByAccountNumber(String accountNumber) {
+        return userRepository.findByAccountNumber(accountNumber);
+    }
+
+    // UPDATE PROFILE
+    public User updateProfile(User user) {
+
+        User existing = userRepository.findByAccountNumber(user.getAccountNumber());
+
+        if (existing != null) {
+            existing.setName(user.getName());
+            existing.setEmail(user.getEmail());
+            existing.setPassword(user.getPassword());
+
+            return userRepository.save(existing);
+        }
+
+        return null;
     }
 }
